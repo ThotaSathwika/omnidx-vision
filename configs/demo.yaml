@@ -1,0 +1,17 @@
+# Synthetic DEMO module used only to smoke-test the full pipeline.
+# Images come from scripts/make_demo_data.py and are NOT medical data.
+risk_thresholds: {low: 0.33, high: 0.66}
+change_monitoring: {prob_review: 0.15, prob_change: 0.05, area_review: 0.20, diff_change: 12.0}
+
+modules:
+  demo_xray:
+    name: DEMO chest X-ray (synthetic)
+    modality: xray
+    demo: true
+    label_note: Synthetic demo data — not a medical model.
+    positive_class: opacity
+    architecture: resnet18
+    image_size: 128
+    segmentation: lungs
+    clinical_features: [age, spo2]
+    dataset: {name: Synthetic demo set, url: scripts/make_demo_data.py, license: n/a, version: "1"}

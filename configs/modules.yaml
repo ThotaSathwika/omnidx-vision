@@ -1,0 +1,71 @@
+# OmniDx Vision — disease module registry (plug-in architecture).
+# Add a new disease by adding a block here, putting its images under datasets/<key>/
+# and running:  python -m omnidx.train --module <key> --data datasets/<key>
+# No UI or API code changes are needed.
+#
+# Dataset fields marked FILL-IN must be completed from the Kaggle page you actually
+# download (name, URL, licence, version). Never invent counts or metrics.
+
+risk_thresholds: {low: 0.33, high: 0.66}
+
+change_monitoring:
+  prob_review: 0.15        # rise in disease probability that triggers clinical review
+  prob_change: 0.05        # smaller shift reported as "Change detected"
+  area_review: 0.20        # relative growth of segmented region that triggers review
+  diff_change: 12.0        # mean aligned pixel difference (0-255) reported as change
+
+modules:
+  copd:
+    name: COPD / Emphysema
+    modality: xray
+    label_note: Trained on emphysema-labelled chest X-rays. It does not represent every form of COPD.
+    positive_class: emphysema
+    architecture: resnet50
+    image_size: 224
+    segmentation: lungs
+    clinical_features: [age, smoking_pack_years, spo2]
+    dataset: {name: FILL-IN (e.g. ChestX6 on Kaggle), url: FILL-IN, license: FILL-IN, version: FILL-IN}
+
+  pneumonia:
+    name: Pneumonia
+    modality: xray
+    label_note: Screens chest X-rays for pneumonia-pattern opacity.
+    positive_class: pneumonia
+    architecture: densenet121
+    image_size: 224
+    segmentation: lungs
+    clinical_features: [age, spo2, temperature]
+    dataset: {name: Chest X-Ray Images (Pneumonia), url: https://www.kaggle.com/datasets/paultimothymooney/chest-xray-pneumonia, license: FILL-IN from Kaggle page, version: FILL-IN}
+
+  brain_tumor:
+    name: Brain Tumor
+    modality: mri
+    label_note: Classifies brain MRI slices into the tumour classes of the training dataset.
+    positive_class: [glioma, meningioma, pituitary]
+    architecture: efficientnet_b0
+    image_size: 224
+    segmentation: brain
+    clinical_features: [age]
+    dataset: {name: Brain Tumor MRI Dataset, url: https://www.kaggle.com/datasets/masoudnickparvar/brain-tumor-mri-dataset, license: FILL-IN from Kaggle page, version: FILL-IN}
+
+  liver_cirrhosis:
+    name: Liver Cirrhosis
+    modality: ultrasound          # change to ct if your validated dataset is CT
+    label_note: Screens liver ultrasound images for cirrhosis-pattern texture.
+    positive_class: cirrhosis
+    architecture: efficientnet_b0
+    image_size: 224
+    segmentation: null            # needs a U-Net trained on liver masks
+    clinical_features: [bilirubin, albumin, ast, alt]
+    dataset: {name: FILL-IN, url: FILL-IN, license: FILL-IN, version: FILL-IN}
+
+  skin_cancer:
+    name: Skin Cancer
+    modality: dermoscopy
+    label_note: Classifies dermoscopic lesions as benign or malignant.
+    positive_class: malignant
+    architecture: efficientnet_b0
+    image_size: 224
+    segmentation: lesion
+    clinical_features: [age]
+    dataset: {name: "Skin Cancer MNIST: HAM10000", url: https://www.kaggle.com/datasets/kmader/skin-cancer-mnist-ham10000, license: FILL-IN from Kaggle page, version: FILL-IN}

@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+
+# patient data, datasets and trained weights never go into git
+storage/
+datasets/
+models/
+*.db
+.cache/
